@@ -17,7 +17,7 @@ export default function RootLayout({
           <nav className="bg-gradient-to-br from-[#1e9afe] to-[#60dfcd] text-white p-4 shadow-lg">
             <div className="container mx-auto flex justify-between items-center">
               <Link href="/">
-              <div className="flex items-center cursor-pointer">
+                <div className="flex items-center cursor-pointer">
                   {/* Favicon (PNG image) */}
                   <img
                     src="/logo.png" // Path to your PNG file in the public directory
@@ -30,14 +30,6 @@ export default function RootLayout({
                   </h1>
                 </div>
               </Link>
-              {/* <ul className="flex space-x-4">
-                <li>
-                  <Link href="/" className="hover:underline">Timer</Link>
-                </li>
-                <li>
-                  <Link href="/tasks" className="hover:underline">Tasks</Link>
-                </li>
-              </ul> */}
             </div>
           </nav>
 
@@ -77,6 +69,17 @@ export default function RootLayout({
                 >
                   <FaCoffee className="text-xl" /> {/* Coffee icon */}
                   <span>Buy Me a Coffee</span>
+                </a>
+              </div>
+
+              {/* Hit Counter */}
+              <div className="mt-4">
+                <a href="https://hits.seeyoufarm.com" target="_blank" rel="noopener noreferrer">
+                  <img
+                    src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fneuralnomads.tech&count_bg=%231E9AFE&title_bg=%2360DFCD&icon=&icon_color=%23E7E7E7&title=views&edge_flat=false"
+                    alt="Hit Counter"
+                    className="h-5" // Adjust the height as needed
+                  />
                 </a>
               </div>
             </div>

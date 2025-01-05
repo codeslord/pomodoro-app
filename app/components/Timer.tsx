@@ -67,7 +67,7 @@ export default function Timer() {
     <div className="flex flex-col items-center justify-center">
       {/* Clickable Pomofocus Text */}
       <Link href="/">
-        <h1 className="text-4xl font-bold mb-8 cursor-pointer hover:underline">Pomodoro</h1>
+        <h1 className="text-4xl font-bold mb-8 cursor-pointer hover:underline">Bromodoro</h1>
       </Link>
 
       {/* Timer Display */}

@@ -134,7 +134,7 @@ export default function Timer() {
       </div>
 
       {/* Audio element for the ding sound */}
-      <audio ref={audioRef} src="/sounds/ding.mp3" preload="auto" />
+      <audio ref={audioRef} src="/ding.mp3" preload="auto" />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 // app/components/Timer.tsx
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useTasks } from '../context/Taskscontext';
 
@@ -11,6 +11,9 @@ export default function Timer() {
   const [customTime, setCustomTime] = useState(25); // Custom time in minutes
   const [selectedTask, setSelectedTask] = useState<number | null>(null); // Selected task ID
   const { tasks, completeTask } = useTasks(); // Use tasks and completeTask from context
+
+  // Ref for the audio element
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   // Filter out completed tasks
   const incompleteTasks = tasks.filter(task => !task.completed);
@@ -42,6 +45,10 @@ export default function Timer() {
       setIsActive(false);
       if (selectedTask !== null) {
         memoizedCompleteTask(selectedTask); // Mark task as completed when timer finishes
+      }
+      // Play the ding sound
+      if (audioRef.current) {
+        audioRef.current.play();
       }
     }
   }, [time, isActive, selectedTask, memoizedCompleteTask]);
@@ -125,6 +132,9 @@ export default function Timer() {
           ))}
         </select>
       </div>
+
+      {/* Audio element for the ding sound */}
+      <audio ref={audioRef} src="/sounds/ding.mp3" preload="auto" />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 // app/layout.tsx
 import './globals.css';
+import Image from 'next/image';
 import Link from 'next/link';
 import { TasksProvider } from './context/Taskscontext';
 import { FaInfoCircle, FaGithub, FaCoffee } from 'react-icons/fa'; // Import icons from React Icons
@@ -19,9 +20,11 @@ export default function RootLayout({
               <Link href="/">
                 <div className="flex items-center cursor-pointer">
                   {/* Favicon (PNG image) */}
-                  <img
+                  <Image
                     src="/logo.png" // Path to your PNG file in the public directory
                     alt="Pomodoro Timer Icon"
+                    width={32}
+                    height={32}
                     className="w-8 h-8 rounded-lg mr-2" // Adjust size and rounded corners
                   />
                   {/* Pomodoro Timer Text */}

@@ -13,9 +13,34 @@ export default function Tasks() {
     setNewTask('');
   };
 
+  const handleExportCSV = () => {
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 19).replace(/[:T]/g, '-');
+    const headers = ['ID,Task,Status\n'];
+    const csvContent = tasks.map(task => 
+      `${task.id},"${task.task}",${task.completed ? 'Completed' : 'Pending'}\n`
+    ).join('');
+    
+    const blob = new Blob([headers + csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `tasks_export_${formattedDate}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="p-8 bg-background">
-      <h1 className="text-2xl font-bold mb-4">Tasks</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Tasks</h1>
+        <button
+          onClick={handleExportCSV}
+          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition"
+        >
+          Export to CSV
+        </button>
+      </div>
       <div className="flex mb-4">
         <input
           type="text"

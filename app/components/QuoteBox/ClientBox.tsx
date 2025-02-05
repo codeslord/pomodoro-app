@@ -9,7 +9,7 @@ type ApiResponse = {
 };
 
 export default function ClientBox() {
-  const [quote, setQuote] = useState("Click refresh for daily motivation!");
+  const [quote, setQuote] = useState("Click refresh for daily motivation! (Max 200/day)");
   const [loading, setLoading] = useState(false);
 
   const generateQuote = async () => {

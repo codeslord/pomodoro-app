@@ -9,7 +9,7 @@ type ApiResponse = {
 };
 
 export default function ClientBox() {
-  const [quote, setQuote] = useState("Click refresh for daily motivation! (Max 200/day)");
+  const [quote, setQuote] = useState("Click refresh for motivation! 👉");
   const [loading, setLoading] = useState(false);
 
   const generateQuote = async () => {
@@ -37,14 +37,14 @@ export default function ClientBox() {
   };
 
   return (
-    <div className="flex items-center justify-center mb-8 gap-4">
-      <div className="bg-white/10 p-4 rounded-lg shadow-lg flex-1 max-w-2xl">
+    <div className="flex items-center justify-center mb-8 gap-4 pt-6">
+      <div className="bg-white p-4 rounded-lg shadow-lg flex-1 max-w-2xl">
         <p className="text-lg italic text-center">{quote}</p>
       </div>
       <button
         onClick={generateQuote}
         disabled={loading}
-        className="p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+        className="p-2 hover:bg-white rounded-full transition-colors disabled:opacity-50"
       >
         {loading ? (
           <svg className="animate-spin h-6 w-6" viewBox="0 0 24 24">

@@ -23,6 +23,8 @@ The Pomodoro Technique is a time management method that breaks work into interva
 - **Simple & Clean UI**: Beautiful and intuitive design for a seamless experience.
 - **No Login Required**: Use the app without creating an account.
 - **Local Storage**: All your tasks and settings are stored in your browser—no external servers involved.
+- **LLM Integration**: Get motivated with LLM generated motivational quotes. 
+- **Export to CSV**: You can export the task list as a CSV anytime, with a timestamped filename.
 
 ---
 
@@ -33,6 +35,8 @@ The Pomodoro Technique is a time management method that breaks work into interva
 3. **Select a Task**: Choose a task to focus on during the timer.
 4. **Start Working**: Click "Start" and focus until the timer ends.
 5. **Auto-Complete**: When the timer ends, the selected task is marked as completed automatically.
+6.  **Export to CSV**: Click on the "Export to CSV" button to export the task list as a CSV anytime, with a timestamped filename.
+7. **Motivation**: Click the refresh button beside the quote box to generate a new motivational quote.
 
 ---
 

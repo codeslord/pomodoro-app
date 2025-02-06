@@ -46,7 +46,7 @@ export default function RootLayout({
               <div className="flex items-center justify-center gap-2">
                 <FaInfoCircle className="text-lg" /> {/* Info icon */}
                 <p>
-                  This app is completely free to use, has no ads, and your data is stored only in your browser.
+                  This app is open source, completely free to use, has no ads, and your data is stored only in your browser.
                 </p>
               </div>
 

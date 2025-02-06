@@ -16,7 +16,8 @@ type ApiResponse = {
 export async function POST(): Promise<NextResponse<ApiResponse>> {
   try {
     const completion = await openai.chat.completions.create({
-      model: "deepseek/deepseek-r1:free",
+      // model: "deepseek/deepseek-r1:free",
+      model: "meta-llama/llama-3.2-1b-instruct:free",
       messages: [
         {
           role: "user",

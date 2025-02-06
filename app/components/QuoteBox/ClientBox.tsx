@@ -2,12 +2,6 @@
 
 import { useState } from 'react';
 
-// Define the response type for the API call
-type ApiResponse = {
-  quote?: string;
-  error?: string;
-};
-
 export default function ClientBox() {
   const [quote, setQuote] = useState("Click refresh for motivation! 👉");
   const [loading, setLoading] = useState(false);
@@ -16,20 +10,27 @@ export default function ClientBox() {
     if (loading) return;
 
     setLoading(true);
+    setQuote(""); // Clear previous quote
     try {
       const response = await fetch('/api/generate-quote', {
         method: 'POST',
       });
 
-      const data: ApiResponse = await response.json();
+      // Handle stream response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
 
-      if (response.ok && data.quote) {
-        setQuote(data.quote);
-      } else {
-        throw new Error(data.error || "Error generating quote");
+      if (!reader) throw new Error("No response body");
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        // Update quote incrementally
+        setQuote(prev => prev + decoder.decode(value));
       }
     } catch (error) {
-      console.error("Generation failed:", error);
+      console.error("Stream error:", error);
       setQuote("Error generating quote");
     } finally {
       setLoading(false);
@@ -39,7 +40,9 @@ export default function ClientBox() {
   return (
     <div className="flex items-center justify-center mb-8 gap-4 pt-6">
       <div className="bg-white p-4 rounded-lg shadow-lg flex-1 max-w-2xl">
-        <p className="text-lg italic text-center">{quote}</p>
+        <p className="text-lg italic text-center">
+          {quote || <span className="text-gray-400">Generating...</span>}
+        </p>
       </div>
       <button
         onClick={generateQuote}

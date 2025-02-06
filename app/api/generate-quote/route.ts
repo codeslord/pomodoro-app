@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-  baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
+  baseURL: "https://api.groq.com/openai/v1",
   apiKey: process.env.MODEL_API_KEY,
 });
 
 export async function POST(): Promise<Response> {
   try {
     const stream = await openai.chat.completions.create({
-      model: "gemini-1.5-flash",
+      model: "llama-3.1-8b-instant",
       messages: [
         {"role": "system", "content": "You are a helpful assistant."},
         {

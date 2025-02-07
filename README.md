@@ -1,6 +1,6 @@
 # Bromodoro
 
-👉 **[Try Bromodoro Now!](https://www.neuralnomads.tech)**
+👉 **[Try Bromodoro Now!](https://www.bromodoro.live)**
 
 ![Bromodoro Logo](./public/logo.png)  
 

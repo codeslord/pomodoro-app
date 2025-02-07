@@ -79,7 +79,7 @@ export default function RootLayout({
               <div className="mt-4">
                 <a href="https://hits.seeyoufarm.com" target="_blank" rel="noopener noreferrer">
                   <img
-                    src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fneuralnomads.tech&count_bg=%231E9AFE&title_bg=%2360DFCD&icon=&icon_color=%23E7E7E7&title=views&edge_flat=false"
+                    src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbromodoro.live&count_bg=%23231E9AFE&title_bg=%231BC83FCD&icon=&icon_color=%2323E7E7E7&title=views&edge_flat=false"
                     alt="Hit Counter"
                     className="h-5" // Adjust the height as needed
                   />

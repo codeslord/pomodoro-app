@@ -54,7 +54,13 @@ export default function ClientBox() {
         {loading ? (
           <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full"></div>
         ) : (
-          <RefreshCw size={24} className="text-primary" />
+          <RefreshCw 
+            size={24} 
+            style={{ 
+              color: '#ec4899', 
+              filter: 'drop-shadow(0 0 3px rgba(236, 72, 153, 0.6))' 
+            }} 
+          />
         )}
       </button>
     </div>

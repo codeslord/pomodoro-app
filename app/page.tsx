@@ -6,18 +6,18 @@ import QuoteBox from './components/QuoteBox';
 export default function Home() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-3xl glass rounded-xl shadow-lg overflow-hidden">
+      <div className="w-full max-w-3xl glass rounded-xl shadow-lg overflow-visible relative">
         <div className="p-6 glass rounded-t-xl">
           <QuoteBox />
         </div>
 
-        {/* Timer Section */}
-        <div className="p-8 glass border-t border-b border-border">
+        {/* Timer Section - Added higher z-index */}
+        <div className="p-8 glass border-t border-b border-border relative z-20">
           <Timer />
         </div>
         
-        {/* Tasks Section */}
-        <div className="p-8 glass rounded-b-xl">
+        {/* Tasks Section - Lower z-index */}
+        <div className="p-8 glass rounded-b-xl relative z-10">
           <Tasks />
         </div>
       </div>

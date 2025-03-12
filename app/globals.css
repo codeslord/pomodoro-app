@@ -147,3 +147,15 @@ select option:checked {
   background: rgba(var(--primary-rgb, 30, 154, 254), 0.4);
   border: 1px solid rgba(var(--primary-rgb, 30, 154, 254), 0.5);
 }
+
+/* Add to the end of your globals.css file */
+.dropdown-wrapper {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Override for dropdown container */
+.dropdown-layer {
+  position: absolute;
+  z-index: 100;
+}

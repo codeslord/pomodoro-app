@@ -4,7 +4,7 @@ import './globals.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { TasksProvider } from './context/Taskscontext';
-import { Info, Github, Coffee, Sun, Moon, Clock } from 'lucide-react'; // Added Clock icon
+import { Info, Github, Coffee, Sun, Moon, Clock } from 'lucide-react'; 
 import { useState, useEffect } from 'react';
 
 export default function RootLayout({
@@ -60,12 +60,19 @@ export default function RootLayout({
               <Link href="/">
                 <div className="flex flex-col items-center cursor-pointer">
                   <div className="flex items-center mb-1">
-                    <Clock className={`mr-2 ${theme === 'light' ? 'text-primary' : 'text-secondary'}`} size={24} />
+                    <Clock 
+                      className="mr-2" 
+                      size={24} 
+                      style={{ 
+                        color: theme === 'light' ? '#1e9afe' : '#60dfcd',
+                        filter: 'drop-shadow(0 0 2px rgba(96, 223, 205, 0.5))'
+                      }} 
+                    />
                     <h1 className="text-2xl font-bold transition-all" 
                         style={{
                           backgroundImage: theme === 'light' 
-                            ? 'linear-gradient(45deg, #0c64b6, #0a876c)' // Darker, more saturated colors for light mode
-                            : 'linear-gradient(45deg, #60dfcd, #1e9afe)', // Original colors work well in dark mode
+                            ? 'linear-gradient(45deg, #0c64b6, #0a876c)' 
+                            : 'linear-gradient(45deg, #60dfcd, #1e9afe)', 
                           WebkitBackgroundClip: 'text',
                           WebkitTextFillColor: 'transparent',
                           backgroundClip: 'text',
@@ -80,15 +87,27 @@ export default function RootLayout({
                 </div>
               </Link>
               
-              {/* Theme toggle - icon only */}
+              {/* Theme toggle - icon only with colorful styling */}
               <button
                 onClick={toggleTheme}
                 className="glass-button p-2 rounded-full transition-colors flex items-center justify-center"
                 aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
               >
                 {theme === 'light' ? 
-                  <Moon className="text-gray-700" size={24} /> : 
-                  <Sun className="text-yellow-300" size={24} />
+                  <Moon 
+                    size={24} 
+                    style={{ 
+                      color: '#4c4cdd',
+                      filter: 'drop-shadow(0 0 3px rgba(255, 255, 0, 0.3))'
+                    }}
+                  /> : 
+                  <Sun 
+                    size={24} 
+                    style={{ 
+                      color: '#ffcc00',
+                      filter: 'drop-shadow(0 0 5px rgba(255, 204, 0, 0.5))'
+                    }}
+                  />
                 }
               </button>
             </div>
@@ -102,7 +121,13 @@ export default function RootLayout({
             <div className="flex flex-col items-center gap-4 max-w-3xl mx-auto">
               {/* Info Message */}
               <div className="flex items-center justify-center gap-2 text-sm">
-                <Info className="text-primary" size={18} /> 
+                <Info 
+                  size={18}
+                  style={{ 
+                    color: '#1e9afe',
+                    filter: 'drop-shadow(0 0 2px rgba(30, 154, 254, 0.5))'
+                  }}
+                /> 
                 <p>
                   This app is open source, completely free to use, has no ads, and your data is stored only in your browser.
                 </p>
@@ -117,7 +142,13 @@ export default function RootLayout({
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                 >
-                  <Github className="text-gray-700 dark:text-gray-300" size={20} />
+                  <Github 
+                    size={20} 
+                    style={{
+                      color: theme === 'light' ? '#6e5494' : '#9c7fd1',
+                      filter: 'drop-shadow(0 0 2px rgba(110, 84, 148, 0.3))'
+                    }}
+                  />
                   <span>GitHub</span>
                 </a>
 
@@ -128,7 +159,13 @@ export default function RootLayout({
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                 >
-                  <Coffee className="text-yellow-600" size={20} />
+                  <Coffee 
+                    size={20} 
+                    style={{
+                      color: '#ffdd00',
+                      filter: 'drop-shadow(0 0 2px rgba(255, 221, 0, 0.5))'
+                    }}
+                  />
                   <span>Buy Me a Coffee</span>
                 </a>
               </div>

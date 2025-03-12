@@ -42,7 +42,14 @@ export default function Tasks() {
           className="glass-button hover:bg-green-700/20 text-white px-4 py-2 rounded-lg transition flex items-center"
           disabled={tasks.length === 0}
         >
-          <Download className="mr-2" size={18} />
+          <Download 
+            className="mr-2" 
+            size={18} 
+            style={{ 
+              color: '#a855f7', 
+              filter: 'drop-shadow(0 0 2px rgba(168, 85, 247, 0.5))' 
+            }} 
+          />
           Export to CSV
         </button>
       </div>
@@ -58,9 +65,16 @@ export default function Tasks() {
         />
         <button
           onClick={handleAddTask}
-          className="bg-primary text-white px-5 py-3 rounded-r-lg hover:bg-opacity-90 transition flex items-center"
+          className="bg-primary/20 glass-button text-text px-5 py-3 rounded-r-lg hover:opacity-90 transition flex items-center"
         >
-          <Plus className="mr-2" size={18} />
+          <Plus 
+            className="mr-2" 
+            size={18} 
+            style={{ 
+              color: '#0ea5e9', 
+              filter: 'drop-shadow(0 0 2px rgba(14, 165, 233, 0.6))' 
+            }} 
+          />
           Add
         </button>
       </div>
@@ -83,7 +97,14 @@ export default function Tasks() {
                     className="text-green-500 hover:text-green-700 mr-4 flex items-center"
                     aria-label="Complete task"
                   >
-                    <Check className="mr-1" size={18} />
+                    <Check 
+                      className="mr-1" 
+                      size={18} 
+                      style={{ 
+                        color: '#10b981', 
+                        filter: 'drop-shadow(0 0 2px rgba(16, 185, 129, 0.6))' 
+                      }} 
+                    />
                     Complete
                   </button>
                 )}
@@ -92,7 +113,14 @@ export default function Tasks() {
                   className="text-red-500 hover:text-red-700 flex items-center"
                   aria-label="Delete task"
                 >
-                  <Trash className="mr-1" size={18} />
+                  <Trash 
+                    className="mr-1" 
+                    size={18} 
+                    style={{ 
+                      color: '#ef4444', 
+                      filter: 'drop-shadow(0 0 2px rgba(239, 68, 68, 0.6))' 
+                    }} 
+                  />
                   Delete
                 </button>
               </div>

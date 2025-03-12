@@ -15,13 +15,13 @@ export default function Home() {
             <QuoteBox />
           </div>
           
-          {/* Timer section - minimal separation */}
-          <div className="p-8 py-6">
+          {/* Timer section with higher z-index */}
+          <div className="p-8 py-6 relative" style={{ zIndex: 20 }}>
             <Timer />
           </div>
           
-          {/* Tasks section - minimal separation */}
-          <div className="p-8 pt-2">
+          {/* Tasks section */}
+          <div className="p-8 pt-2 relative" style={{ zIndex: 10 }}>
             <Tasks />
           </div>
         </div>

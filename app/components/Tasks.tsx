@@ -196,7 +196,7 @@ export default function Tasks() {
             <li 
               key={task.id}
               id={`task-${index}`}
-              className={`glass flex justify-between items-center p-4 rounded-lg task-item 
+              className={`glass-dark flex justify-between items-center p-4 rounded-lg task-item 
                 ${task.completed ? 'opacity-60' : ''}
                 transition-opacity duration-200`}
               draggable={!task.completed}

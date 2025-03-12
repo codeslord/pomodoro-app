@@ -6,7 +6,7 @@ const ClientQuoteBox = dynamic(
   () => import('./ClientBox'),
   {
     ssr: false,
-    loading: () => <div className="h-20 mb-8" />
+    loading: () => <div className="glass h-20 mb-8 rounded-lg animate-pulse" />
   }
 );
 

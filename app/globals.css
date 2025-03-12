@@ -3,23 +3,147 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: rgba(255, 255, 255, 0.85);
+  --foreground: rgba(255, 255, 255, 0.6);
+  --card-bg: rgba(255, 255, 255, 0.25);
+  --text: #333333;
+  --text-secondary: #666666;
+  --primary: #1e9afe;
+  --secondary: #60dfcd;
+  --button-text: #ffffff;
+  --border: rgba(255, 255, 255, 0.18);
+  --nav-bg: rgba(255, 255, 255, 0.1);
+  --footer-bg: rgba(255, 255, 255, 0.1);
+  --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --gradient: linear-gradient(135deg, #6edff6, #1e9afe);
+  --backdrop-blur: blur(10px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme='dark'] {
+  --background: rgba(18, 18, 18, 0.85);
+  --foreground: rgba(30, 30, 30, 0.6);
+  --card-bg: rgba(42, 42, 42, 0.25);
+  --text: #ffffff;
+  --text-secondary: #b0b0b0;
+  --primary: #1e9afe;
+  --secondary: #60dfcd;
+  --button-text: #ffffff;
+  --border: rgba(255, 255, 255, 0.08);
+  --nav-bg: rgba(30, 30, 30, 0.1);
+  --footer-bg: rgba(30, 30, 30, 0.1);
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --gradient: linear-gradient(135deg, #1e2c55, #203a73);
+  --backdrop-blur: blur(10px);
 }
-
-/* body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-} */
 
 body {
-  @apply bg-background text-text font-sans;
+  background-image: var(--gradient);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+.task-item {
+  background-color: var(--card-bg);
+  transition: background-color 0.3s ease;
+}
+
+.glass {
+  background: var(--card-bg);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.glass-dark {
+  background: var(--foreground);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.nav-container {
+  background: var(--nav-bg);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.footer {
+  background: var(--footer-bg);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border-top: 1px solid var(--border);
+}
+
+.task-button {
+  transition: opacity 0.2s ease;
+}
+
+.task-button:hover {
+  opacity: 0.8;
+}
+
+input, select {
+  background: var(--card-bg) !important;
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+}
+
+/* Fix for autofill background in dark mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  transition: background-color 5000s;
+  -webkit-text-fill-color: var(--text) !important;
+}
+
+/* Add these rules to hide default number input spinners */
+/* For Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+/* For Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Dropdown styling */
+select option {
+  background-color: var(--card-bg);
+  color: var(--text);
+  padding: 10px;
+}
+
+/* For some browsers that support styling options better */
+select option:hover,
+select option:focus,
+select option:active,
+select option:checked {
+  background-color: var(--primary);
+  color: white;
+}
+
+.glass-button {
+  background: rgba(var(--primary-rgb, 30, 154, 254), 0.2);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border: 1px solid rgba(var(--primary-rgb, 30, 154, 254), 0.3);
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+  background: rgba(var(--primary-rgb, 30, 154, 254), 0.4);
+  border: 1px solid rgba(var(--primary-rgb, 30, 154, 254), 0.5);
 }

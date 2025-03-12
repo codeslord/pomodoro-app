@@ -3,14 +3,17 @@
 
 import { useState } from 'react';
 import { useTasks } from '../context/Taskscontext';
+import { Plus, Download, Check, Trash } from 'lucide-react';
 
 export default function Tasks() {
-  const { tasks, addTask, deleteTask, completeTask } = useTasks(); // Use tasks and functions from context
+  const { tasks, addTask, deleteTask, completeTask } = useTasks();
   const [newTask, setNewTask] = useState('');
 
   const handleAddTask = () => {
-    addTask(newTask);
-    setNewTask('');
+    if (newTask.trim() !== '') {
+      addTask(newTask);
+      setNewTask('');
+    }
   };
 
   const handleExportCSV = () => {
@@ -31,55 +34,72 @@ export default function Tasks() {
   };
 
   return (
-    <div className="p-8 bg-background">
-      <div className="flex justify-between items-center mb-4">
+    <div className="max-w-4xl mx-auto">
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Tasks</h1>
         <button
           onClick={handleExportCSV}
-          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition"
+          className="glass-button hover:bg-green-700/20 text-white px-4 py-2 rounded-lg transition flex items-center"
+          disabled={tasks.length === 0}
         >
+          <Download className="mr-2" size={18} />
           Export to CSV
         </button>
       </div>
-      <div className="flex mb-4">
+      
+      <div className="flex mb-6">
         <input
           type="text"
           placeholder="Add a new task"
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleAddTask()}
-          className="flex-1 p-2 border rounded-lg mr-2"
+          className="flex-1 p-3 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary"
         />
         <button
           onClick={handleAddTask}
-          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition"
+          className="bg-primary text-white px-5 py-3 rounded-r-lg hover:bg-opacity-90 transition flex items-center"
         >
+          <Plus className="mr-2" size={18} />
           Add
         </button>
       </div>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id} className="flex justify-between items-center bg-white p-3 rounded-lg shadow mb-2">
-            <span className={task.completed ? 'line-through' : ''}>{task.task}</span>
-            <div>
-              {!task.completed && (
+      
+      {tasks.length === 0 ? (
+        <div className="text-center py-10 text-text-secondary">
+          No tasks yet. Add some tasks to get started!
+        </div>
+      ) : (
+        <ul className="space-y-3">
+          {tasks.map((task) => (
+            <li key={task.id} className="glass flex justify-between items-center p-4 rounded-lg">
+              <span className={`${task.completed ? 'line-through text-text-secondary' : ''} flex-grow`}>
+                {task.task}
+              </span>
+              <div className="flex items-center">
+                {!task.completed && (
+                  <button
+                    onClick={() => completeTask(task.id)}
+                    className="text-green-500 hover:text-green-700 mr-4 flex items-center"
+                    aria-label="Complete task"
+                  >
+                    <Check className="mr-1" size={18} />
+                    Complete
+                  </button>
+                )}
                 <button
-                  onClick={() => completeTask(task.id)}
-                  className="text-green-500 hover:text-green-700 transition mr-2"
+                  onClick={() => deleteTask(task.id)}
+                  className="text-red-500 hover:text-red-700 flex items-center"
+                  aria-label="Delete task"
                 >
-                  Complete
-                </button>
-              )}
-              <button
-                onClick={() => deleteTask(task.id)}
-                className="text-red-500 hover:text-red-700 transition"
-                >
+                  <Trash className="mr-1" size={18} />
                   Delete
                 </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

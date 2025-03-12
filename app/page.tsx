@@ -1,23 +1,23 @@
 // app/page.tsx
-// import dynamic from 'next/dynamic';
 import Timer from './components/Timer';
 import Tasks from './components/Tasks';
 import QuoteBox from './components/QuoteBox';
 
-
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-8">
-      <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="p-8 bg-background">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-3xl glass rounded-xl shadow-lg overflow-hidden">
+        <div className="p-6 glass rounded-t-xl">
           <QuoteBox />
         </div>
 
-        {/* Rest of your existing layout */}
-        <div className="bg-gradient-to-br from-[#60dfcd] to-[#1e9afe] text-white p-8">
+        {/* Timer Section */}
+        <div className="p-8 glass border-t border-b border-border">
           <Timer />
         </div>
-        <div className="p-8">
+        
+        {/* Tasks Section */}
+        <div className="p-8 glass rounded-b-xl">
           <Tasks />
         </div>
       </div>

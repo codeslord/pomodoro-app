@@ -14,7 +14,7 @@ interface TasksContextType {
   addTask: (taskName: string) => void;
   deleteTask: (taskId: number) => void;
   completeTask: (taskId: number) => void;
-  reorderTasks: (startIndex: number, endIndex: number) => void; // New reorder function
+  reorderTasks: (sourceTaskId: number, targetTaskId: number) => void; // Updated reorder function
 }
 
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
@@ -57,12 +57,17 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
   
-  // New reorder function to handle drag and drop
-  const reorderTasks = (startIndex: number, endIndex: number) => {
-    const reorderedTasks = [...tasks];
-    const [removed] = reorderedTasks.splice(startIndex, 1);
-    reorderedTasks.splice(endIndex, 0, removed);
-    setTasks(reorderedTasks);
+  // Updated reorder function to work with task IDs instead of indices
+  const reorderTasks = (sourceTaskId: number, targetTaskId: number) => {
+    const sourceIndex = tasks.findIndex(task => task.id === sourceTaskId);
+    const targetIndex = tasks.findIndex(task => task.id === targetTaskId);
+    
+    if (sourceIndex !== -1 && targetIndex !== -1) {
+      const reorderedTasks = [...tasks];
+      const [removed] = reorderedTasks.splice(sourceIndex, 1);
+      reorderedTasks.splice(targetIndex, 0, removed);
+      setTasks(reorderedTasks);
+    }
   };
   
   return (
@@ -71,7 +76,7 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
       addTask, 
       deleteTask, 
       completeTask,
-      reorderTasks // Exposing the new function 
+      reorderTasks // Exposing the updated function 
     }}>
       {children}
     </TasksContext.Provider>

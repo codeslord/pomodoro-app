@@ -11,8 +11,8 @@ import { Plus, Download, Check, Trash, GripVertical } from 'lucide-react';
 export default function Tasks() {
   const { tasks, addTask, deleteTask, completeTask, reorderTasks } = useTasks();
   const [newTask, setNewTask] = useState('');
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-  const dragOverItemIndex = useRef<number | null>(null);
+  const [draggedTaskId, setDraggedTaskId] = useState<number | null>(null);
+  const dragOverTaskId = useRef<number | null>(null);
   
   // Reference to maintain dimensions during drag
   const dragItemSize = useRef<{ width: number, height: number } | null>(null);
@@ -42,15 +42,17 @@ export default function Tasks() {
   };
 
   // Drag event handlers
-  const handleDragStart = (e: React.DragEvent, index: number) => {
+  const handleDragStart = (e: React.DragEvent, taskId: number) => {
+    const task = tasks.find(t => t.id === taskId);
+    
     // Don't allow dragging completed tasks
-    if (tasks[index].completed) {
+    if (task?.completed) {
       e.preventDefault();
       return;
     }
     
     // Store the item's dimensions before drag starts
-    const element = document.getElementById(`task-${index}`);
+    const element = document.getElementById(`task-${taskId}`);
     if (element) {
       const rect = element.getBoundingClientRect();
       dragItemSize.current = {
@@ -63,7 +65,7 @@ export default function Tasks() {
       element.style.height = `${rect.height}px`;
     }
     
-    setDraggedIndex(index);
+    setDraggedTaskId(taskId);
     e.dataTransfer.effectAllowed = "move";
     
     // This is needed for Firefox
@@ -81,7 +83,7 @@ export default function Tasks() {
 
   const handleDragEnd = () => {
     // Get the dragged element
-    const element = draggedIndex !== null ? document.getElementById(`task-${draggedIndex}`) : null;
+    const element = draggedTaskId !== null ? document.getElementById(`task-${draggedTaskId}`) : null;
     
     // Remove inline styles that were set during drag start
     if (element) {
@@ -90,14 +92,14 @@ export default function Tasks() {
       element.classList.remove('dragging');
     }
     
-    // Reorder tasks if we have valid indices
-    if (draggedIndex !== null && dragOverItemIndex.current !== null) {
-      reorderTasks(draggedIndex, dragOverItemIndex.current);
+    // Reorder tasks if we have valid task IDs
+    if (draggedTaskId !== null && dragOverTaskId.current !== null) {
+      reorderTasks(draggedTaskId, dragOverTaskId.current);
     }
     
     // Reset all state variables
-    setDraggedIndex(null);
-    dragOverItemIndex.current = null;
+    setDraggedTaskId(null);
+    dragOverTaskId.current = null;
     dragItemSize.current = null;
     
     // Clean up any remaining visual indicators
@@ -106,23 +108,32 @@ export default function Tasks() {
     });
   };
 
-  const handleDragOver = (e: React.DragEvent, index: number) => {
+  const handleDragOver = (e: React.DragEvent, taskId: number) => {
     e.preventDefault();
-    dragOverItemIndex.current = index;
+    dragOverTaskId.current = taskId;
     
     // Add visual cue of where the item will be dropped
     const tasksList = document.querySelector('.tasks-list');
     if (tasksList) {
       const taskItems = [...tasksList.querySelectorAll('.task-item:not(.dragging)')];
       
-      taskItems.forEach((item, i) => {
+      taskItems.forEach(item => {
         item.classList.remove('drop-above', 'drop-below');
         
-        if (i === index) {
-          if (draggedIndex !== null && draggedIndex < index) {
-            item.classList.add('drop-below');
-          } else if (draggedIndex !== null && draggedIndex > index) {
-            item.classList.add('drop-above');
+        const itemId = parseInt(item.id.split('-')[1]);
+        if (itemId === taskId) {
+          const draggedTask = tasks.find(t => t.id === draggedTaskId);
+          const targetTask = tasks.find(t => t.id === taskId);
+          
+          if (draggedTask && targetTask) {
+            const draggedIndex = displayTasks.findIndex(t => t.id === draggedTaskId);
+            const targetIndex = displayTasks.findIndex(t => t.id === taskId);
+            
+            if (draggedIndex < targetIndex) {
+              item.classList.add('drop-below');
+            } else if (draggedIndex > targetIndex) {
+              item.classList.add('drop-above');
+            }
           }
         }
       });
@@ -192,17 +203,17 @@ export default function Tasks() {
         </div>
       ) : (
         <ul className="space-y-3 tasks-list">
-          {displayTasks.map((task, index) => (
+          {displayTasks.map((task) => (
             <li 
               key={task.id}
-              id={`task-${index}`}
+              id={`task-${task.id}`}
               className={`glass-dark flex justify-between items-center p-4 rounded-lg task-item 
                 ${task.completed ? 'opacity-60' : ''}
                 transition-opacity duration-200`}
               draggable={!task.completed}
-              onDragStart={(e) => handleDragStart(e, index)}
+              onDragStart={(e) => handleDragStart(e, task.id)}
               onDragEnd={handleDragEnd}
-              onDragOver={(e) => handleDragOver(e, index)}
+              onDragOver={(e) => handleDragOver(e, task.id)}
             >
               {/* Drag Handle */}
               <div 

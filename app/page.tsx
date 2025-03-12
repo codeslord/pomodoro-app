@@ -6,19 +6,24 @@ import QuoteBox from './components/QuoteBox';
 export default function Home() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
+      {/* Single glass container for all three components */}
       <div className="w-full max-w-3xl glass rounded-xl shadow-lg overflow-visible relative">
-        <div className="p-6 glass rounded-t-xl">
-          <QuoteBox />
-        </div>
-
-        {/* Timer Section - Added higher z-index */}
-        <div className="p-8 glass border-t border-b border-border relative z-20">
-          <Timer />
-        </div>
-        
-        {/* Tasks Section - Lower z-index */}
-        <div className="p-8 glass rounded-b-xl relative z-10">
-          <Tasks />
+        {/* All components in a single visual unit */}
+        <div className="rounded-xl">
+          {/* QuoteBox section - adjusted padding */}
+          <div className="p-6 pb-0">
+            <QuoteBox />
+          </div>
+          
+          {/* Timer section - minimal separation */}
+          <div className="p-8 py-6">
+            <Timer />
+          </div>
+          
+          {/* Tasks section - minimal separation */}
+          <div className="p-8 pt-2">
+            <Tasks />
+          </div>
         </div>
       </div>
     </div>

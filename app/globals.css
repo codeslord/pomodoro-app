@@ -46,7 +46,11 @@ body {
 
 .task-item {
   background-color: var(--card-bg);
-  transition: background-color 0.3s ease;
+  transition: opacity 0.2s ease;
+  /* Prevent width shrinking during drag */
+  width: 100%;
+  box-sizing: border-box;
+  contain: layout;
 }
 
 .glass {
@@ -158,4 +162,24 @@ select option:checked {
 .dropdown-layer {
   position: absolute;
   z-index: 100;
+}
+
+/* Add these drag and drop styles to the end of your file */
+
+.dragging {
+  opacity: 0.4;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  /* Remove scale transform to prevent shrinking */
+  /* transform: scale(1.02); */
+}
+
+.drop-above {
+  border-top: 2px solid var(--primary);
+  margin-top: -2px;
+}
+
+.drop-below {
+  border-bottom: 2px solid var(--primary);
+  margin-bottom: -2px;
 }

@@ -1,13 +1,21 @@
 // app/components/Tasks.tsx
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTasks } from '../context/Taskscontext';
-import { Plus, Download, Check, Trash } from 'lucide-react';
+import { Plus, Download, Check, Trash, GripVertical } from 'lucide-react';
+
+// Add this to your globals.css
+// .dragging { opacity: 0.5; }
 
 export default function Tasks() {
-  const { tasks, addTask, deleteTask, completeTask } = useTasks();
+  const { tasks, addTask, deleteTask, completeTask, reorderTasks } = useTasks();
   const [newTask, setNewTask] = useState('');
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const dragOverItemIndex = useRef<number | null>(null);
+  
+  // Reference to maintain dimensions during drag
+  const dragItemSize = useRef<{ width: number, height: number } | null>(null);
 
   const handleAddTask = () => {
     if (newTask.trim() !== '') {
@@ -32,6 +40,105 @@ export default function Tasks() {
     link.click();
     URL.revokeObjectURL(url);
   };
+
+  // Drag event handlers
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    // Don't allow dragging completed tasks
+    if (tasks[index].completed) {
+      e.preventDefault();
+      return;
+    }
+    
+    // Store the item's dimensions before drag starts
+    const element = document.getElementById(`task-${index}`);
+    if (element) {
+      const rect = element.getBoundingClientRect();
+      dragItemSize.current = {
+        width: rect.width,
+        height: rect.height
+      };
+      
+      // Set inline styles to maintain size during drag
+      element.style.width = `${rect.width}px`;
+      element.style.height = `${rect.height}px`;
+    }
+    
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+    
+    // This is needed for Firefox
+    if (e.dataTransfer.setDragImage && element) {
+      e.dataTransfer.setDragImage(element, 20, 20);
+    }
+    
+    // Delay adding the dragging class to ensure drag image is captured first
+    setTimeout(() => {
+      if (element) {
+        element.classList.add('dragging');
+      }
+    }, 0);
+  };
+
+  const handleDragEnd = () => {
+    // Get the dragged element
+    const element = draggedIndex !== null ? document.getElementById(`task-${draggedIndex}`) : null;
+    
+    // Remove inline styles that were set during drag start
+    if (element) {
+      element.style.width = '';
+      element.style.height = '';
+      element.classList.remove('dragging');
+    }
+    
+    // Reorder tasks if we have valid indices
+    if (draggedIndex !== null && dragOverItemIndex.current !== null) {
+      reorderTasks(draggedIndex, dragOverItemIndex.current);
+    }
+    
+    // Reset all state variables
+    setDraggedIndex(null);
+    dragOverItemIndex.current = null;
+    dragItemSize.current = null;
+    
+    // Clean up any remaining visual indicators
+    document.querySelectorAll('.drop-above, .drop-below').forEach(el => {
+      el.classList.remove('drop-above', 'drop-below');
+    });
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    dragOverItemIndex.current = index;
+    
+    // Add visual cue of where the item will be dropped
+    const tasksList = document.querySelector('.tasks-list');
+    if (tasksList) {
+      const taskItems = [...tasksList.querySelectorAll('.task-item:not(.dragging)')];
+      
+      taskItems.forEach((item, i) => {
+        item.classList.remove('drop-above', 'drop-below');
+        
+        if (i === index) {
+          if (draggedIndex !== null && draggedIndex < index) {
+            item.classList.add('drop-below');
+          } else if (draggedIndex !== null && draggedIndex > index) {
+            item.classList.add('drop-above');
+          }
+        }
+      });
+    }
+  };
+
+  // Filter tasks: incomplete first, then completed
+  const sortedTasks = [...tasks].sort((a, b) => {
+    if (a.completed && !b.completed) return 1;
+    if (!a.completed && b.completed) return -1;
+    return 0;
+  });
+
+  const incompleteTasks = sortedTasks.filter(task => !task.completed);
+  const completedTasks = sortedTasks.filter(task => task.completed);
+  const displayTasks = [...incompleteTasks, ...completedTasks];
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -84,9 +191,32 @@ export default function Tasks() {
           No tasks yet. Add some tasks to get started!
         </div>
       ) : (
-        <ul className="space-y-3">
-          {tasks.map((task) => (
-            <li key={task.id} className="glass flex justify-between items-center p-4 rounded-lg">
+        <ul className="space-y-3 tasks-list">
+          {displayTasks.map((task, index) => (
+            <li 
+              key={task.id}
+              id={`task-${index}`}
+              className={`glass flex justify-between items-center p-4 rounded-lg task-item 
+                ${task.completed ? 'opacity-60' : ''}
+                transition-opacity duration-200`}
+              draggable={!task.completed}
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragEnd={handleDragEnd}
+              onDragOver={(e) => handleDragOver(e, index)}
+            >
+              {/* Drag Handle */}
+              <div 
+                className={`mr-3 ${task.completed ? 'cursor-not-allowed opacity-40' : 'cursor-grab active:cursor-grabbing'}`}
+              >
+                <GripVertical 
+                  size={18} 
+                  style={{ 
+                    color: '#60dfcd', 
+                    filter: 'drop-shadow(0 0 2px rgba(96, 223, 205, 0.5))' 
+                  }} 
+                />
+              </div>
+              
               <span className={`${task.completed ? 'line-through text-text-secondary' : ''} flex-grow`}>
                 {task.task}
               </span>

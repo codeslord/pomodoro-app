@@ -173,10 +173,13 @@ export default function RootLayout({
               {/* Hit Counter */}
               <div className="mt-2">
                 <a href="https://hits.seeyoufarm.com" target="_blank" rel="noopener noreferrer">
-                  <img
+                  <Image
                     src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbromodoro.live&count_bg=%23231E9AFE&title_bg=%231BC83FCD&icon=&icon_color=%2323E7E7E7&title=views&edge_flat=false"
                     alt="Hit Counter"
-                    className="h-5"
+                    width={80}
+                    height={20}
+                    className="h-5 w-auto"
+                    unoptimized // Use this for external images that can't be optimized by Next.js
                   />
                 </a>
               </div>

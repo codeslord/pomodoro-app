@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { RefreshCw, Quote } from 'lucide-react';
+import { RefreshCw } from 'lucide-react'; // Removed the unused Quote import
 
 export default function ClientBox() {
   const [quote, setQuote] = useState("Click refresh for motivation! 👉");

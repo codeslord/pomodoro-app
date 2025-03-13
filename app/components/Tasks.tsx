@@ -17,6 +17,9 @@ export default function Tasks() {
   // Reference to maintain dimensions during drag
   const dragItemSize = useRef<{ width: number, height: number } | null>(null);
 
+  // Add this new state to track drop position
+  const [dropPosition, setDropPosition] = useState<'above' | 'below' | null>(null);
+
   const handleAddTask = () => {
     if (newTask.trim() !== '') {
       addTask(newTask);
@@ -41,7 +44,7 @@ export default function Tasks() {
     URL.revokeObjectURL(url);
   };
 
-  // Drag event handlers
+  // Revised drag event handlers
   const handleDragStart = (e: React.DragEvent, taskId: number) => {
     const task = tasks.find(t => t.id === taskId);
     
@@ -92,15 +95,16 @@ export default function Tasks() {
       element.classList.remove('dragging');
     }
     
-    // Reorder tasks if we have valid task IDs
-    if (draggedTaskId !== null && dragOverTaskId.current !== null) {
-      reorderTasks(draggedTaskId, dragOverTaskId.current);
+    // Only reorder if we have valid task IDs and they're different
+    if (draggedTaskId !== null && dragOverTaskId.current !== null && draggedTaskId !== dragOverTaskId.current && dropPosition) {
+      reorderTasks(draggedTaskId, dragOverTaskId.current, dropPosition);
     }
     
     // Reset all state variables
     setDraggedTaskId(null);
     dragOverTaskId.current = null;
     dragItemSize.current = null;
+    setDropPosition(null);
     
     // Clean up any remaining visual indicators
     document.querySelectorAll('.drop-above, .drop-below').forEach(el => {
@@ -110,33 +114,39 @@ export default function Tasks() {
 
   const handleDragOver = (e: React.DragEvent, taskId: number) => {
     e.preventDefault();
+    
+    // Don't allow dropping on completed tasks or the same task
+    const targetTask = tasks.find(t => t.id === taskId);
+    if (targetTask?.completed || taskId === draggedTaskId) {
+      return;
+    }
+    
+    // Update the current drag target
     dragOverTaskId.current = taskId;
     
     // Add visual cue of where the item will be dropped
     const tasksList = document.querySelector('.tasks-list');
-    if (tasksList) {
-      const taskItems = [...tasksList.querySelectorAll('.task-item:not(.dragging)')];
+    if (!tasksList || draggedTaskId === null) return;
+    
+    const taskItems = [...tasksList.querySelectorAll('.task-item:not(.dragging)')];
+    
+    // Clear all indicators first
+    taskItems.forEach(item => {
+      item.classList.remove('drop-above', 'drop-below');
+    });
+    
+    // Get the current element
+    const currentElement = taskItems.find(el => parseInt(el.id.split('-')[1]) === taskId);
+    
+    if (currentElement && draggedTaskId !== null) {
+      // Determine drop position based on cursor position within the target element
+      const rect = currentElement.getBoundingClientRect();
+      const middleY = rect.top + rect.height / 2;
+      const position = e.clientY < middleY ? 'above' : 'below';
+      setDropPosition(position);
       
-      taskItems.forEach(item => {
-        item.classList.remove('drop-above', 'drop-below');
-        
-        const itemId = parseInt(item.id.split('-')[1]);
-        if (itemId === taskId) {
-          const draggedTask = tasks.find(t => t.id === draggedTaskId);
-          const targetTask = tasks.find(t => t.id === taskId);
-          
-          if (draggedTask && targetTask) {
-            const draggedIndex = displayTasks.findIndex(t => t.id === draggedTaskId);
-            const targetIndex = displayTasks.findIndex(t => t.id === taskId);
-            
-            if (draggedIndex < targetIndex) {
-              item.classList.add('drop-below');
-            } else if (draggedIndex > targetIndex) {
-              item.classList.add('drop-above');
-            }
-          }
-        }
-      });
+      // Add appropriate class for visual indication
+      currentElement.classList.add(`drop-${position}`);
     }
   };
 

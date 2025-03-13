@@ -49,9 +49,13 @@ export default function RootLayout({
                   <Image
                     src="/logo.png"
                     alt="Pomodoro Timer Icon"
-                    width={32}
-                    height={32}
-                    className="w-8 h-8 rounded-lg"
+                    width={64}
+                    height={64}
+                    className={`w-16 h-16 rounded-lg transition-all ${
+                      theme === 'dark' 
+                        ? 'invert brightness-90 filter drop-shadow(0 0 8px rgba(96, 223, 205, 0.6))' 
+                        : ''
+                    }`}
                   />
                 </div>
               </Link>

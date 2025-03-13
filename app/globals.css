@@ -53,6 +53,14 @@ body {
   contain: layout;
 }
 
+.task-item.drop-above {
+  border-top: 2px solid #60dfcd;
+}
+
+.task-item.drop-below {
+  border-bottom: 2px solid #60dfcd;
+}
+
 .glass {
   background: var(--card-bg);
   backdrop-filter: var(--backdrop-blur);
@@ -167,7 +175,8 @@ select option:checked {
 /* Add these drag and drop styles to the end of your file */
 
 .dragging {
-  opacity: 0.4;
+  opacity: 0.5;
+  background-color: rgba(96, 223, 205, 0.1);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   z-index: 10;
   /* Remove scale transform to prevent shrinking */

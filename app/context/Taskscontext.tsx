@@ -14,7 +14,7 @@ interface TasksContextType {
   addTask: (taskName: string) => void;
   deleteTask: (taskId: number) => void;
   completeTask: (taskId: number) => void;
-  reorderTasks: (sourceTaskId: number, targetTaskId: number) => void; // Updated reorder function
+  reorderTasks: (sourceTaskId: number, targetTaskId: number, dropPosition?: 'above' | 'below') => void;
 }
 
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
@@ -57,15 +57,28 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
   
-  // Updated reorder function to work with task IDs instead of indices
-  const reorderTasks = (sourceTaskId: number, targetTaskId: number) => {
+  // Enhanced reorder function with drop position awareness
+  const reorderTasks = (sourceTaskId: number, targetTaskId: number, dropPosition: 'above' | 'below' = 'below') => {
     const sourceIndex = tasks.findIndex(task => task.id === sourceTaskId);
     const targetIndex = tasks.findIndex(task => task.id === targetTaskId);
     
-    if (sourceIndex !== -1 && targetIndex !== -1) {
+    // Ensure both indices are valid and different
+    if (sourceIndex !== -1 && targetIndex !== -1 && sourceIndex !== targetIndex) {
       const reorderedTasks = [...tasks];
-      const [removed] = reorderedTasks.splice(sourceIndex, 1);
-      reorderedTasks.splice(targetIndex, 0, removed);
+      const [removedTask] = reorderedTasks.splice(sourceIndex, 1);
+      
+      // Determine insertion index based on drop position
+      let insertIndex;
+      
+      if (dropPosition === 'above') {
+        // If dropping above, insert at target's position
+        insertIndex = sourceIndex < targetIndex ? targetIndex - 1 : targetIndex;
+      } else {
+        // If dropping below, insert after target
+        insertIndex = sourceIndex < targetIndex ? targetIndex : targetIndex + 1;
+      }
+      
+      reorderedTasks.splice(insertIndex, 0, removedTask);
       setTasks(reorderedTasks);
     }
   };

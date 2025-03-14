@@ -269,10 +269,10 @@ export default function Timer() {
         </button>
         
         {isDropdownOpen && (
-          <div className="absolute w-full mt-1 glass-dark rounded-lg shadow-lg dropdown-layer overflow-hidden">
-            {/* Clear selection option */}
+          <div className="absolute w-full mt-1 glass-dark rounded-lg shadow-lg dropdown-layer overflow-hidden task-select-dropdown">
+            {/* Fixed: Changed li to div for Clear selection option */}
             {selectedTask !== null && (
-              <li
+              <div
                 className="p-3 cursor-pointer hover:bg-primary/20 transition border-b border-border text-text-secondary"
                 onClick={() => {
                   setSelectedTask(null);
@@ -282,7 +282,7 @@ export default function Timer() {
                 aria-selected={false}
               >
                 Clear selection
-              </li>
+              </div>
             )}
             
             {incompleteTasks.length === 0 ? (
@@ -307,7 +307,7 @@ export default function Timer() {
       </div>
 
       {selectedTask && (
-        <div className="text-center text-text-secondary glass px-4 py-2 rounded-lg mt-2">
+        <div className="text-center text-text-secondary glass px-4 py-2 rounded-lg mt-2 task-completion-message">
           Task will be marked as complete when timer ends
         </div>
       )}

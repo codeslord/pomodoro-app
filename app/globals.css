@@ -192,3 +192,15 @@ select option:checked {
   border-bottom: 2px solid var(--primary);
   margin-bottom: -2px;
 }
+
+/* Add the class to your dropdown element */
+.task-select-dropdown {
+  /* Your dropdown content */
+  z-index: 10; /* Higher z-index */
+  position: relative;
+}
+
+/* And add this class to your message */
+.task-completion-message {
+  z-index: 5; /* Lower z-index */
+}

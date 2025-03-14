@@ -13,11 +13,6 @@ export default function Tasks() {
   const [newTask, setNewTask] = useState('');
   const [draggedTaskId, setDraggedTaskId] = useState<number | null>(null);
   const dragOverTaskId = useRef<number | null>(null);
-  
-  // Reference to maintain dimensions during drag
-  const dragItemSize = useRef<{ width: number, height: number } | null>(null);
-
-  // Add this new state to track drop position
   const [dropPosition, setDropPosition] = useState<'above' | 'below' | null>(null);
 
   const handleAddTask = () => {
@@ -44,110 +39,96 @@ export default function Tasks() {
     URL.revokeObjectURL(url);
   };
 
-  // Revised drag event handlers
+  // Improved drag event handlers
   const handleDragStart = (e: React.DragEvent, taskId: number) => {
-    const task = tasks.find(t => t.id === taskId);
+    // Prevent drag event from triggering buttons
+    e.stopPropagation();
     
-    // Don't allow dragging completed tasks
-    if (task?.completed) {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task || task.completed) {
       e.preventDefault();
       return;
     }
     
-    // Store the item's dimensions before drag starts
-    const element = document.getElementById(`task-${taskId}`);
-    if (element) {
-      const rect = element.getBoundingClientRect();
-      dragItemSize.current = {
-        width: rect.width,
-        height: rect.height
-      };
-      
-      // Set inline styles to maintain size during drag
-      element.style.width = `${rect.width}px`;
-      element.style.height = `${rect.height}px`;
-    }
-    
     setDraggedTaskId(taskId);
+    
+    // Set data transfer for better cross-browser compatibility
+    e.dataTransfer.setData('text/plain', taskId.toString());
     e.dataTransfer.effectAllowed = "move";
     
-    // This is needed for Firefox
-    if (e.dataTransfer.setDragImage && element) {
-      e.dataTransfer.setDragImage(element, 20, 20);
+    const element = document.getElementById(`task-${taskId}`);
+    if (element) {
+      // Add dragging class after a small delay so the drag image looks right
+      setTimeout(() => element.classList.add('dragging'), 0);
     }
-    
-    // Delay adding the dragging class to ensure drag image is captured first
-    setTimeout(() => {
-      if (element) {
-        element.classList.add('dragging');
-      }
-    }, 0);
   };
 
-  const handleDragEnd = () => {
-    // Get the dragged element
-    const element = draggedTaskId !== null ? document.getElementById(`task-${draggedTaskId}`) : null;
+  const handleDragEnd = (e: React.DragEvent) => {
+    // Prevent default actions and stop propagation
+    e.preventDefault();
+    e.stopPropagation();
     
-    // Remove inline styles that were set during drag start
+    // Remove dragging visual styles
+    const element = document.getElementById(`task-${draggedTaskId}`);
     if (element) {
-      element.style.width = '';
-      element.style.height = '';
       element.classList.remove('dragging');
     }
     
-    // Only reorder if we have valid task IDs and they're different
-    if (draggedTaskId !== null && dragOverTaskId.current !== null && draggedTaskId !== dragOverTaskId.current && dropPosition) {
-      reorderTasks(draggedTaskId, dragOverTaskId.current, dropPosition);
-    }
-    
-    // Reset all state variables
-    setDraggedTaskId(null);
-    dragOverTaskId.current = null;
-    dragItemSize.current = null;
-    setDropPosition(null);
-    
-    // Clean up any remaining visual indicators
+    // Clear all drop indicators
     document.querySelectorAll('.drop-above, .drop-below').forEach(el => {
       el.classList.remove('drop-above', 'drop-below');
     });
+    
+    // Perform reordering if conditions are met
+    if (draggedTaskId !== null && 
+        dragOverTaskId.current !== null && 
+        draggedTaskId !== dragOverTaskId.current && 
+        dropPosition) {
+      
+      reorderTasks(draggedTaskId, dragOverTaskId.current, dropPosition);
+    }
+    
+    // Reset state
+    setDraggedTaskId(null);
+    dragOverTaskId.current = null;
+    setDropPosition(null);
   };
 
   const handleDragOver = (e: React.DragEvent, taskId: number) => {
+    // Always prevent default to allow drop
     e.preventDefault();
+    
+    // Set data transfer properties
+    e.dataTransfer.dropEffect = "move";
     
     // Don't allow dropping on completed tasks or the same task
     const targetTask = tasks.find(t => t.id === taskId);
-    if (targetTask?.completed || taskId === draggedTaskId) {
+    if (!targetTask || targetTask.completed || taskId === draggedTaskId) {
       return;
     }
     
     // Update the current drag target
     dragOverTaskId.current = taskId;
     
-    // Add visual cue of where the item will be dropped
-    const tasksList = document.querySelector('.tasks-list');
-    if (!tasksList || draggedTaskId === null) return;
+    // Determine drop position
+    const element = document.getElementById(`task-${taskId}`);
+    if (!element) return;
     
-    const taskItems = [...tasksList.querySelectorAll('.task-item:not(.dragging)')];
-    
-    // Clear all indicators first
-    taskItems.forEach(item => {
-      item.classList.remove('drop-above', 'drop-below');
+    // Clear previous indicators
+    document.querySelectorAll('.drop-above, .drop-below').forEach(el => {
+      el.classList.remove('drop-above', 'drop-below');
     });
     
-    // Get the current element
-    const currentElement = taskItems.find(el => parseInt(el.id.split('-')[1]) === taskId);
+    const rect = element.getBoundingClientRect();
+    const middle = rect.top + rect.height / 2;
+    const position = e.clientY < middle ? 'above' : 'below';
     
-    if (currentElement && draggedTaskId !== null) {
-      // Determine drop position based on cursor position within the target element
-      const rect = currentElement.getBoundingClientRect();
-      const middleY = rect.top + rect.height / 2;
-      const position = e.clientY < middleY ? 'above' : 'below';
-      setDropPosition(position);
-      
-      // Add appropriate class for visual indication
-      currentElement.classList.add(`drop-${position}`);
-    }
+    setDropPosition(position);
+    element.classList.add(`drop-${position}`);
+  };
+  
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
   };
 
   // Filter tasks: incomplete first, then completed
@@ -224,8 +205,9 @@ export default function Tasks() {
               onDragStart={(e) => handleDragStart(e, task.id)}
               onDragEnd={handleDragEnd}
               onDragOver={(e) => handleDragOver(e, task.id)}
+              onDragEnter={handleDragEnter}
             >
-              {/* Drag Handle */}
+              {/* Drag Handle - Only clickable for non-completed tasks */}
               <div 
                 className={`mr-3 ${task.completed ? 'cursor-not-allowed opacity-40' : 'cursor-grab active:cursor-grabbing'}`}
               >
@@ -241,7 +223,9 @@ export default function Tasks() {
               <span className={`${task.completed ? 'line-through text-text-secondary' : ''} flex-grow`}>
                 {task.task}
               </span>
-              <div className="flex items-center">
+              
+              {/* Task actions - separated from drag handling */}
+              <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
                 {!task.completed && (
                   <button
                     onClick={() => completeTask(task.id)}

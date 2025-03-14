@@ -26,9 +26,29 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const savedTasks = localStorage.getItem('tasks');
     if (savedTasks) {
-      setTasks(JSON.parse(savedTasks));
+      try {
+        const parsedTasks = JSON.parse(savedTasks);
+        // Ensure we don't have duplicate IDs
+        const uniqueTasks = deduplicateTasks(parsedTasks);
+        setTasks(uniqueTasks);
+      } catch (error) {
+        console.error("Failed to parse saved tasks", error);
+        setTasks([]);
+      }
     }
   }, []);
+  
+  // Utility to ensure no duplicate IDs
+  const deduplicateTasks = (taskList: Task[]): Task[] => {
+    const seenIds = new Set();
+    return taskList.filter(task => {
+      if (seenIds.has(task.id)) {
+        return false; // Skip duplicate IDs
+      }
+      seenIds.add(task.id);
+      return true;
+    });
+  };
   
   // Save tasks to localStorage whenever tasks change
   useEffect(() => {
@@ -37,11 +57,18 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
   
   const addTask = (taskName: string) => {
     if (taskName.trim() === '') return;
+    
+    // Find highest ID to ensure uniqueness even after deletions
+    const maxId = tasks.length > 0 
+      ? Math.max(...tasks.map(task => task.id)) 
+      : 0;
+      
     const newTask = {
-      id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
+      id: maxId + 1,
       task: taskName,
       completed: false
     };
+    
     setTasks(prevTasks => [...prevTasks, newTask]);
   };
   
@@ -57,30 +84,42 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
   
-  // Enhanced reorder function with drop position awareness
+  // Improved reorder function with safer index calculation
   const reorderTasks = (sourceTaskId: number, targetTaskId: number, dropPosition: 'above' | 'below' = 'below') => {
-    const sourceIndex = tasks.findIndex(task => task.id === sourceTaskId);
-    const targetIndex = tasks.findIndex(task => task.id === targetTaskId);
+    // Create a new array to avoid mutation issues
+    const updatedTasks = [...tasks];
+    
+    // Find indices of source and target tasks
+    const sourceIndex = updatedTasks.findIndex(task => task.id === sourceTaskId);
+    const targetIndex = updatedTasks.findIndex(task => task.id === targetTaskId);
     
     // Ensure both indices are valid and different
-    if (sourceIndex !== -1 && targetIndex !== -1 && sourceIndex !== targetIndex) {
-      const reorderedTasks = [...tasks];
-      const [removedTask] = reorderedTasks.splice(sourceIndex, 1);
-      
-      // Determine insertion index based on drop position
-      let insertIndex;
-      
-      if (dropPosition === 'above') {
-        // If dropping above, insert at target's position
-        insertIndex = sourceIndex < targetIndex ? targetIndex - 1 : targetIndex;
-      } else {
-        // If dropping below, insert after target
-        insertIndex = sourceIndex < targetIndex ? targetIndex : targetIndex + 1;
-      }
-      
-      reorderedTasks.splice(insertIndex, 0, removedTask);
-      setTasks(reorderedTasks);
+    if (sourceIndex === -1 || targetIndex === -1 || sourceIndex === targetIndex) {
+      return; // Exit early if invalid
     }
+    
+    // Don't allow reordering completed tasks
+    if (updatedTasks[sourceIndex].completed || updatedTasks[targetIndex].completed) {
+      return; // Exit if either task is completed
+    }
+    
+    // Remove the source task first
+    const [removedTask] = updatedTasks.splice(sourceIndex, 1);
+    
+    // Adjust target index if needed - after removing the source task,
+    // the target index may have shifted if source was before target
+    const adjustedTargetIndex = sourceIndex < targetIndex ? targetIndex - 1 : targetIndex;
+    
+    // Calculate insertion index based on drop position
+    const insertIndex = dropPosition === 'above' ? 
+      adjustedTargetIndex : 
+      adjustedTargetIndex + 1;
+    
+    // Insert at the correct position
+    updatedTasks.splice(insertIndex, 0, removedTask);
+    
+    // Update state with the new order, ensuring we don't have duplicates
+    setTasks(deduplicateTasks(updatedTasks));
   };
   
   return (
@@ -89,7 +128,7 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
       addTask, 
       deleteTask, 
       completeTask,
-      reorderTasks // Exposing the updated function 
+      reorderTasks
     }}>
       {children}
     </TasksContext.Provider>

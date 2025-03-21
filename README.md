@@ -2,7 +2,8 @@
 
 👉 **[Try Bromodoro Now!](https://www.bromodoro.live)**
 
-![Bromodoro Logo](./public/logo.png)  
+![Bromodoro Logo](./public/logo-color.png)  
+
 
 **Bromodoro** is a simple, elegant, and easy-to-use Pomodoro Timer app designed to boost your productivity. It’s free to use, ad-free, and doesn’t require any login. All your data is stored locally in your browser, ensuring complete privacy.
 
@@ -10,7 +11,18 @@
 
 ## What is the Pomodoro Technique? 🕒
 
-The Pomodoro Technique is a time management method that breaks work into intervals (traditionally 25 minutes) separated by short breaks. This helps maintain focus and prevent burnout.
+The Pomodoro Technique is a time management method that breaks work into intervals (traditionally 25 minutes) separated by short breaks.
+
+The Pomodoro Technique can help maintain and improve focus, reduce procrastination, prevent burnout and increase overall productivity. 
+
+How to Use:
+
+1. **Choose a Task**: Select a task to focus on. 
+3. **Work**: Focus on the task without distractions until the timer goes off. 
+2. **Set the Timer**: Set a timer for 25 minutes. 
+4. **Take a Break**: Take a 5-minute break. 
+5. **Repeat**: Repeat steps 1-4 three more times. 
+6. **Longer Break**: After four pomodoros, take a longer break of 15-30 minutes. 
 
 ---
 
@@ -42,7 +54,11 @@ The Pomodoro Technique is a time management method that breaks work into interva
 
 ## Screenshots 📸
 
-![Bromodoro Screenshot](./public/screenshot.png)  
+<div style="display: flex; gap: 10px;">
+  <img src="./public/screenshot-dark.webp" alt="Bromodoro Dark Screenshot" style="width: 50%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
+  <img src="./public/screenshot-light.webp" alt="Bromodoro Light Screenshot" style="width: 50%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
+</div>
+
 
 ---
 

@@ -2,7 +2,7 @@
 
 👉 **[Try Bromodoro Now!](https://www.bromodoro.live)**
 
-![Bromodoro Logo](./public/logo-color.png)  
+![Bromodoro Logo](./public/logo-color.PNG)  
 
 
 **Bromodoro** is a simple, elegant, and easy-to-use Pomodoro Timer app designed to boost your productivity. It’s free to use, ad-free, and doesn’t require any login. All your data is stored locally in your browser, ensuring complete privacy.
@@ -14,8 +14,6 @@
 The Pomodoro Technique is a time management method that breaks work into intervals (traditionally 25 minutes) separated by short breaks.
 
 The Pomodoro Technique can help maintain and improve focus, reduce procrastination, prevent burnout and increase overall productivity. 
-
-How to Use:
 
 1. **Choose a Task**: Select a task to focus on. 
 3. **Work**: Focus on the task without distractions until the timer goes off. 

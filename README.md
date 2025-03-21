@@ -52,10 +52,10 @@ The Pomodoro Technique can help maintain and improve focus, reduce procrastinati
 
 ## Screenshots 📸
 
-<div style="display: flex; gap: 10px;">
-  <img src="./public/screenshot-dark.webp" alt="Bromodoro Dark Screenshot" style="width: 50%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
-  <img src="./public/screenshot-light.webp" alt="Bromodoro Light Screenshot" style="width: 50%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
-</div>
+<p align="center">
+  <img src="./public/screenshot-dark.webp" alt="Dark Screenshot" width="45%">
+  <img src="./public/screenshot-light.webp" alt="Light Screenshot" width="45%">
+</p>
 
 
 ---

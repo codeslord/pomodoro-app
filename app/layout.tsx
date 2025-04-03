@@ -4,7 +4,7 @@ import './globals.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { TasksProvider } from './context/Taskscontext';
-import { Info, Github, Coffee, Sun, Moon, Clock } from 'lucide-react'; 
+import { Info, Github, Sun, Moon, Clock } from 'lucide-react'; 
 import { useState, useEffect } from 'react';
 
 export default function RootLayout({
@@ -137,7 +137,7 @@ export default function RootLayout({
                 </p>
               </div>
 
-              {/* GitHub and Buy Me a Coffee Links */}
+              {/* GitHub Link */}
               <div className="flex items-center justify-center gap-6">
                 {/* GitHub Link */}
                 <a

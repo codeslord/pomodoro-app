@@ -155,37 +155,6 @@ export default function RootLayout({
                   />
                   <span>GitHub</span>
                 </a>
-
-                {/* Buy Me a Coffee Link */}
-                <a
-                  href="https://buymeacoffee.com/rohithrnair"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-                >
-                  <Coffee 
-                    size={20} 
-                    style={{
-                      color: '#ffdd00',
-                      filter: 'drop-shadow(0 0 2px rgba(255, 221, 0, 0.5))'
-                    }}
-                  />
-                  <span>Buy Me a Coffee</span>
-                </a>
-              </div>
-              
-              {/* Hit Counter */}
-              <div className="mt-2">
-                <a href="https://hits.seeyoufarm.com" target="_blank" rel="noopener noreferrer">
-                  <Image
-                    src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbromodoro.live&count_bg=%23231E9AFE&title_bg=%231BC83FCD&icon=&icon_color=%2323E7E7E7&title=views&edge_flat=false"
-                    alt="Hit Counter"
-                    width={80}
-                    height={20}
-                    className="h-5 w-auto"
-                    unoptimized // Use this for external images that can't be optimized by Next.js
-                  />
-                </a>
               </div>
             </div>
           </footer>
